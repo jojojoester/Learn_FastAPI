@@ -17,14 +17,22 @@ A beginner-friendly FastAPI guide with clear examples, CRUD operations, and Mong
 # Clone the repository
 git clone https://github.com/jojojoester/Learn_FastAPI.git
 cd Learn_FastAPI
+```
 
-#Creating a virtual environment (Optional)
+# Creating a virtual environment (Optional)
+```bash
+#creating virtual environment
 python -m venv venv
+#activating the virtual environment
 source venv/bin/activate #On mac use venv/Scripts/activate
+```
 
-#Install dependencies
+# Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
 # Running the app
+```bash
 uvicorn main:app --reload
-
+```
