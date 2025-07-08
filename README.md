@@ -8,8 +8,9 @@ A beginner-friendly FastAPI guide with clear examples, CRUD operations, and Mong
 - FastAPI Routing
 
 # Files
-test.py: Main file where all the learning progress is recorded.
-pytypes.py: Contains python type hints.
+- **`test.py`**: Main file where all the learning progress is recorded.
+- **`pytypes.py`**: Contains python type hints.
+ 
 # Tech Stack
 - Python 3.10+
 - Uvicorn
