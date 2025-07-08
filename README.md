@@ -10,6 +10,7 @@ A beginner-friendly FastAPI guide with clear examples, CRUD operations, and Mong
 # Files
 - **`test.py`**: Main file where all the learning progress is recorded.
 - **`pytypes.py`**: Contains python type hints.
+- **`requirements.txt`**: Contains all the dependencies for the program
  
 # Tech Stack
 - Python 3.10+
