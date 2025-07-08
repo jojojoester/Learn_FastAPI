@@ -40,3 +40,6 @@ pip install -r requirements.txt
 ```bash
 uvicorn main:app --reload
 ```
+
+# Contributing
+Feel free to fork the repository and submit pull requests for improvements or additional examples.
