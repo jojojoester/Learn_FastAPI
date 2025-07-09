@@ -1,10 +1,10 @@
 #FastAPI is a python class that provides all the functionality for your API.
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 #importing enum, Enum stands for enumeration. It is a way of creating a pre defined values. It deprives the user to enter random values and only limit the choice to the few predefined options.
 from enum import Enum
 #importing basemodel from pydantic
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Annotated
 
 app = FastAPI()
 #Creating an instances called "app" of the class FastAPI
@@ -64,8 +64,8 @@ class Genre (str, Enum):
     action = "action"
     drama = "drama"
 #path parameter
-@app.get("/movies_by_genre/{genre_name}")
-def get_movies_by_genre(genre_name: Genre, year:int = None):
+@app.get("/movies_by_genre/{genre_name}")#This is an actual path parameter.
+def get_movies_by_genre(genre_name: Genre, year:int = None):#This is a query parameter.
     if year:
         return {
             "message": f"fetching {genre_name} released in {year}"
@@ -95,6 +95,25 @@ def create_item(item: Item):
 
 
 #Now, let us view the data that we just inserted
-@app.get("/view_items/}")
+@app.get("/view_items/")
 def view_items():
     return{"item": items}
+
+
+
+
+# String Validations: String validation means checking that a string value follows certain rules before you accept it. For example: Minimum length (eg: 3 characters) , Maximum length (eg: 10 characters)
+#Why we do it?
+#a. To prevent bad data(eg: empty name)
+#b. To protect your app from error
+
+
+#let us see some demonstration here:
+#we need to import 2 things before doing string validation.
+#a. Qurey from fastapi
+#b. Annotated from typing
+
+
+@app.get("/name/")
+async def read_items(name: Annotated[Optional[str], Query(max_length=5)] = None):#here, name is optional, so we use Optional[str]. This means the type of name can be str or None. The = None means its default value is None (so the client can omit it). The Query(max_length=5) restricts the query parameter to have at most 5 characters if provided.
+    return{"Name": name}
