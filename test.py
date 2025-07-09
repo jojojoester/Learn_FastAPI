@@ -3,7 +3,7 @@ from fastapi import FastAPI, Query
 #importing enum, Enum stands for enumeration. It is a way of creating a pre defined values. It deprives the user to enter random values and only limit the choice to the few predefined options.
 from enum import Enum
 #importing basemodel from pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel, AfterValidator
 from typing import Optional, Annotated
 
 app = FastAPI()
@@ -115,5 +115,38 @@ def view_items():
 
 
 @app.get("/name/")
-async def read_items(name: Annotated[Optional[str], Query(max_length=5)] = None):#here, name is optional, so we use Optional[str]. This means the type of name can be str or None. The = None means its default value is None (so the client can omit it). The Query(max_length=5) restricts the query parameter to have at most 5 characters if provided.
-    return{"Name": name}
+async def read_items(name: Annotated[Optional[str], Query(max_length=5, min_length=1)] = None):
+    # here, name is optional, so we use Optional[str]. This means the type of name can be str or None. 
+    # The = None means its default value is None (so the client can omit it). 
+    # The Query(max_length=5) restricts the query parameter to have at most 5 characters if provided.
+    return {"Name": name}
+
+
+#you can also pre-define the value of name without defining it none.
+@app.get("/name/")
+async def read_name(name: Annotated[str, Query(max_length = 5)] = "jojo"):
+    return{"name": name}
+
+#here, = "jojo" means i have a predefined value for name which is jojo.
+
+
+
+#Custom Validation
+#Sometimes built in validators are not enough. You want to add your own login to check the data. 
+
+
+def check_name(value: str):
+    if value.lower() == "foo":
+        raise ValueError('name cannot be "foo"')
+    return value
+
+@app.get("/items/")
+async def read_items(
+    name: Annotated[str, AfterValidator(check_name)]
+):
+    return {"name": name}
+#Explanation
+# name is a query parameter.
+# AfterValidator(check_name) applies your custom validation function after parsing.
+# If name is "foo" (case-insensitive), it raises a validation error.
+# Otherwise, it returns the name.
