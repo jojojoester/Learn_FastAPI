@@ -1,5 +1,5 @@
 #FastAPI is a python class that provides all the functionality for your API.
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Path
 #importing enum, Enum stands for enumeration. It is a way of creating a pre defined values. It deprives the user to enter random values and only limit the choice to the few predefined options.
 from enum import Enum
 #importing basemodel from pydantic
@@ -157,3 +157,25 @@ async def read_items(
 
 
 #Path Parameter and Numeric Validation
+#Need to import path from fastapi and Annotated from typing
+@app.get("/read_items/{item_id}")
+def read_items(
+    item_id: Annotated[int, Path(title="The id of the item to get")], q: Annotated[Optional[str], Query(Alias="item query")] = None
+):
+    results = {"item_id": item_id}
+    if q:
+        results.update({"q":q})
+    return results
+
+
+#here, our function [read_items] takes 2 parameters: 
+#1. item_id: comes from the path parameter
+#2. q: from query string
+
+# In line 163, int is the data type of the item_id, path here add a title or a metadata and annotated let us combine the typehints plus validation info.
+#Now as for the Alias, Alias basically lets how rename how the user writes the parameter.
+# Here, Query(Alias="item query") We want the query parameter to be called item query in the URL, not just q.
+#In Python, you can’t have spaces in variable names (q is the Python name).
+#In the URL, you can use spaces — but in URLs, spaces are written as %20.
+
+
