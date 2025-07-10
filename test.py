@@ -150,3 +150,10 @@ async def read_items(
 # AfterValidator(check_name) applies your custom validation function after parsing.
 # If name is "foo" (case-insensitive), it raises a validation error.
 # Otherwise, it returns the name.
+
+
+
+
+
+
+#Path Parameter and Numeric Validation
