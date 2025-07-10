@@ -3,8 +3,8 @@ from fastapi import FastAPI, Query, Path
 #importing enum, Enum stands for enumeration. It is a way of creating a pre defined values. It deprives the user to enter random values and only limit the choice to the few predefined options.
 from enum import Enum
 #importing basemodel from pydantic
-from pydantic import BaseModel, AfterValidator
-from typing import Optional, Annotated
+from pydantic import BaseModel, AfterValidator, Field
+from typing import Optional, Annotated, Literal
 
 app = FastAPI()
 #Creating an instances called "app" of the class FastAPI
@@ -178,4 +178,42 @@ def read_items(
 #In Python, you can’t have spaces in variable names (q is the Python name).
 #In the URL, you can use spaces — but in URLs, spaces are written as %20.
 
+
+
+
+
+
+#Query Parameter Model
+#Normally, Query parameters are simple such as: ?q=apple&skip=0&limit=10        [q, skip and limit]
+#But What if there are numerous query parameters? In this case, we make a basemodel of Query parameter and store all the query parameters there for reusability.
+app = FastAPI()
+
+
+class FilterParams(BaseModel):
+    model_config = {"extra": "forbid"}
+    limit: int = Field(100, gt=0, le=100) #here ,the limit should be of integer with the value greater than 0 or smaller than or equal to 100. If not provided, default value becomes 100.
+    offset: int = Field(0, ge=0)#here, it says the value should start from 0. if not provided, default value becomes 0.
+    order_by: Literal["created_at", "updated_at"] = "created_at" #here, must be either, created_at or updated_at. But the default value is created_at.
+    tags: list[str] = []#It can have multiple tags. Such as tags=tech&tags=ai.
+
+
+@app.get("/items/")
+async def read_items(filter_query: Annotated[FilterParams, Query()]):
+    return filter_query
+# FastAPI sees that your function wants a filter_query.
+# You told FastAPI:
+
+# filter_query should be built using the FilterParams Pydantic model
+# The Query() part says “Read it from query parameters, not the request body.”
+
+# FastAPI does:
+# Looks at the URL.
+# Finds limit, offset, order_by, tags.
+# Makes a FilterParams object using those values.
+# Gives that object to your filter_query parameter.
+
+
+
+#In some special cases, you want to restrict the query parameters that you want to recieve. You can use pydantic model to forbid any extra fields.
+#see in line 193.
 
