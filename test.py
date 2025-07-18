@@ -160,7 +160,8 @@ async def read_items(
 #Need to import path from fastapi and Annotated from typing
 @app.get("/read_items/{item_id}")
 def read_items(
-    item_id: Annotated[int, Path(title="The id of the item to get")], q: Annotated[Optional[str], Query(Alias="item query")] = None
+    item_id: Annotated[int, Path(title="The id of the item to get")], 
+    q: Annotated[Optional[str], Query(Alias="item query")] = None
 ):
     results = {"item_id": item_id}
     if q:
@@ -186,9 +187,6 @@ def read_items(
 #Query Parameter Model
 #Normally, Query parameters are simple such as: ?q=apple&skip=0&limit=10        [q, skip and limit]
 #But What if there are numerous query parameters? In this case, we make a basemodel of Query parameter and store all the query parameters there for reusability.
-app = FastAPI()
-
-
 class FilterParams(BaseModel):
     model_config = {"extra": "forbid"}
     limit: int = Field(100, gt=0, le=100) #here ,the limit should be of integer with the value greater than 0 or smaller than or equal to 100. If not provided, default value becomes 100.
@@ -217,3 +215,26 @@ async def read_items(filter_query: Annotated[FilterParams, Query()]):
 #In some special cases, you want to restrict the query parameters that you want to recieve. You can use pydantic model to forbid any extra fields.
 #see in line 193.
 
+
+
+
+
+#Body - Multiple Parameters
+#Here is a advance use of the body request declarations
+#Here, I have used two basemodels i.e. Item and User. Item contains the info about the items and user contains the info about the user's details.
+class Item(BaseModel):
+    name: str
+    description: Optional[str]
+    price: Optional[int]
+    tax: Optional[int]
+    #here, left side contains the varaibles and right side contains the data type.
+
+class User(BaseModel):
+    username: str
+    first_name: str
+    last_name: str
+    
+@app.get("/items{item_id}")
+async def update_item(item_id: int, item: Item, user: User):
+    results = {"item_id": {item_id}, "item": {item}, "user": {user}}
+    return results
