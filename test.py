@@ -6,6 +6,13 @@ from enum import Enum
 from pydantic import BaseModel, AfterValidator, Field
 from typing import Optional, Annotated, Literal, List, Set
 
+#importing additional data types
+from uuid import UUID
+from datetime import datetime, date, time, timedelta
+from decimal import Decimal
+from typing import FrozenSet
+
+
 app = FastAPI()
 #Creating an instances called "app" of the class FastAPI
 #app will be the main point of interaction to create all your APIs.
@@ -381,4 +388,26 @@ class Image(BaseModel):
 
 
 
+#Extra Data Type
+#UUID: Unique Identifier (A unique ID that nobody else will have.)
+#datetime.datetime: Date and time. (A full date and time.)
+#datetime.date: Date only. (Only the date (year-month-day).)
+#datetime.time: Time only. (Only the time (hour-minute-second).)
+#datetime.timedelta: Duration (A length of time)
+#frozenset: Immutable unique collection (Like a set, but can’t be changed.)
+#bytes: Raw binary data (Raw data — not text.)
+#Decimal: Precise decimal numbers (A precise number for money.)
 
+class Example(BaseModel):
+    id: UUID
+    created_at: datetime
+    birth_date: date
+    alarm: time
+    duration: timedelta
+    tags: FrozenSet[str]
+    content: bytes
+    price: Decimal
+
+@app.post("/demo/")
+async def show_data(data: Example):
+    return data
