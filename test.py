@@ -323,6 +323,60 @@ class User(BaseModel):
     sub: Set[str] = set()
 
 
+#Nested Model
+#Nested Model means a sub model inside a main model
+class Image(BaseModel):
+    url: str
+    name: str
+
+
+class Item(BaseModel):
+    name: str = Field(..., example = "jojo")
+    description: Optional[str]
+    image: Optional[Image] = None
+
+
+
+
+#Declaring Request example data
+#Here, we will see model config in detail. We can add examples for pydantic model.
+
+class Image(BaseModel):
+    url: str
+    name: str
+    
+    class Config:
+        scheme_extra = {
+            "example": {
+                "url": "jsfshfshdadmaskfvzifsdmcv.png",
+                "name": "image of a lion"
+            }
+        }
+
+#Why we declare request example data?
+#It's like here's what a valid request body should look.
+#There are two types from where we can declare example data.
+#1. Field
+class Item(BaseModel):
+    name: str = Field(..., example = "jojo")
+    description: Optional[str]
+    image: Optional[Image] = None
+
+
+
+#2. Config (scheme_extra)
+class Image(BaseModel):
+    url: str
+    name: str
+    
+    class Config:
+        scheme_extra = {
+            "example": {
+                "url": "jsfshfshdadmaskfvzifsdmcv.png",
+                "name": "image of a lion"
+            }
+        }
+
 
 
 
