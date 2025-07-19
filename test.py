@@ -4,7 +4,7 @@ from fastapi import FastAPI, Query, Path
 from enum import Enum
 #importing basemodel from pydantic
 from pydantic import BaseModel, AfterValidator, Field
-from typing import Optional, Annotated, Literal
+from typing import Optional, Annotated, Literal, List, Set
 
 app = FastAPI()
 #Creating an instances called "app" of the class FastAPI
@@ -295,6 +295,36 @@ class User(BaseModel):
 #Field applies to one field only. for eg:  
 # name: str = Field(..., example = "jojo") implies to the name only and not other.
 # But model config applies to the whole model.
+
+
+
+
+
+#Body- Nested Models
+#Nested Model means you have one pydantic model inside another.
+
+#let us talk about List
+#importing List from typing
+class User(BaseModel):
+    name: str
+    level: int
+    address: str
+    sub: List[str] = []#Subject fileds can have multiple data such as maths, english etc. So we used a List "str" denotes each and every data inside the list should be of str data type. If no list are provided, in default an empty list is assigned.
+
+
+
+#Now, let's talk about Set
+#Set is a collection of unordered unique items.
+#We use Set when order does not matter and we want only unique values.
+#To use Set, import Set from typing
+class User(BaseModel):
+    name: str
+    level: int
+    sub: Set[str] = set()
+
+
+
+
 
 
 
