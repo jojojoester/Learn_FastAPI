@@ -238,3 +238,63 @@ class User(BaseModel):
 async def update_item(item_id: int, item: Item, user: User):
     results = {"item_id": {item_id}, "item": {item}, "user": {user}}
     return results
+
+
+class User(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    phone_number: int = 1222121212
+
+class Item(BaseModel):
+    name: str = "Unknown"
+    description: Optional[str] = None
+    price: int = 10
+    tax: Optional[int] = None
+
+@app.post("/items/{item_id}")
+def read_detail(item_id: int, item: Item, user: User):
+    return {
+        "user_message": f"{user.first_name} is very handsome and carries a {user.phone_number} number.",
+        "item_message": f"{item.name} is very expensive. It cost me {item.price} with {item.tax} embedded tax."
+    }
+
+
+
+
+#Difference Between Fields and Model Config
+
+#Body, Fields
+#Need to import Field from Pydantic
+#Field lets you add an extra rules and details for a single attribute in your model. 
+#Field fine tunes your model for Validation, Documentation.
+class User(BaseModel):
+    name: str = Field(..., example = "jojo")
+    level: int = Field(..., example = 12)
+
+class Item(BaseModel):
+    item_name : str = Field(..., example = "Noodles")
+    item_price : int = Field(..., example = 1200)
+
+
+#Model Config
+#model config is used to set global setting for the whole model
+class User(BaseModel):
+    name : str
+    level : int = Field(..., alias = "class")
+
+    class Config:
+        scheme_extra = {
+            "example":{
+            "name": "jojo", 
+            "class": 12
+        }
+        }
+    
+
+#An actual difference between Field and Model Config is: 
+#Field applies to one field only. for eg:  
+# name: str = Field(..., example = "jojo") implies to the name only and not other.
+# But model config applies to the whole model.
+
+
+
