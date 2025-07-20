@@ -411,3 +411,9 @@ class Example(BaseModel):
 @app.post("/demo/")
 async def show_data(data: Example):
     return data
+
+
+
+
+
+#cookies
