@@ -430,6 +430,3 @@ def set_cookie(response: Response):
 @app.get("/get-cookie")
 def get_cookie(my_cookie: str = Cookie(None)):
     return {"my_cookie_value": my_cookie}
-
-
-
